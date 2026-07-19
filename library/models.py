@@ -6,7 +6,7 @@ from config.settings import AUTH_USER_MODEL
 class Author(models.Model):
     """Автор"""
 
-    name = models.CharField(max_length=255, verbose_name="Имя автора")
+    name = models.CharField(max_length=255, unique=True, verbose_name="Имя автора")
     birth_date = models.DateField(blank=True, null=True, verbose_name="Дата рождения")
 
     class Meta:

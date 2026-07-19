@@ -1,6 +1,8 @@
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.serializers import ValidationError
 
+from library.paginations import CustomPagination
 from users.models import User
 from users.permissions import IsOwner
 from users.serializers import UserSerializer
@@ -24,6 +26,7 @@ class UserListAPIView(ListAPIView):
         IsAuthenticated,
         IsAdminUser,
     )
+    pagination_class = CustomPagination
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
@@ -46,7 +49,9 @@ class UserUpdateAPIView(UpdateAPIView):
 
 class UserDestroyAPIView(DestroyAPIView):
     queryset = User.objects.all()
-    permission_classes = (
-        IsAuthenticated,
-        IsOwner,
-    )
+    permission_classes = (IsAuthenticated, IsOwner | IsAdminUser)
+
+    def perform_destroy(self, instance):
+        if instance.bookloan_set.filter(status="active").exists():
+            raise ValidationError("Нельзя удалить пользователя с активными выдачами.")
+        instance.delete()
