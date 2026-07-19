@@ -2,8 +2,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from users.permissions import IsOwner
-
 from .models import Author, Book, BookLoan
 from .paginations import CustomPagination
 from .serializers import AuthorSerializer, BookLoanSerializer, BookSerializer
@@ -14,7 +12,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [IsAuthenticated]
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_fields = ['name']  # фильтрует по имени автора
@@ -55,7 +52,7 @@ class BookLoanViewSet(viewsets.ModelViewSet):
 
     queryset = BookLoan.objects.all()
     serializer_class = BookLoanSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated,]
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_fields = ['status', 'user']  # фильтрует по статусу выдачи и пользователю

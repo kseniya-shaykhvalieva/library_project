@@ -26,5 +26,5 @@ class BookLoanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookLoan
-        fields = "__all__"
+        fields = ['id', 'book', 'user', 'borrowed_at', 'returned_at', 'status', 'book_available_copies']
         validators = [ReturnDateValidator("borrowed_at", "returned_at"), AvailableCopiesValidator("book")]
