@@ -1,0 +1,15 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+.git
+.gitignore
+.idea
+.DS_Store
+*.sqlite3
+htmlcov
+coverage
+celerybeat-schedule
+media/
+static/
